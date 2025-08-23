@@ -36,8 +36,6 @@ body {
   overflow-x: hidden;
 }
 
-/* --- Style transisi halaman sudah dihapus --- */
-
 /* --- ANIMASI: Scroll-triggered --- */
 .animate-on-scroll {
   opacity: 0;
@@ -270,7 +268,7 @@ header nav a.active::after {
   margin-bottom: 0.5rem;
 }
 
-/* --- Gaya Halaman Kontak & Proyek --- */
+/* --- Gaya Halaman Proyek --- */
 .project-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -282,6 +280,7 @@ header nav a.active::after {
   overflow: hidden;
   border: 1px solid var(--border-color);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 .project-card:hover {
   transform: translateY(-8px);
@@ -310,11 +309,9 @@ header nav a.active::after {
   color: var(--primary-color);
   text-decoration: none;
   font-weight: bold;
-  transition: color 0.3s ease;
 }
-.project-link:hover {
-  color: var(--primary-hover-color);
-}
+
+/* --- Gaya Halaman Kontak --- */
 .contact-intro {
   text-align: left;
   max-width: 600px;
@@ -414,6 +411,83 @@ footer p {
 }
 .footer-socials a:hover img {
   opacity: 1;
+}
+
+/* --- GAYA MODAL --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+}
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.modal-content {
+  background-color: var(--secondary-bg-color);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  transform: scale(0.95);
+  transition: transform 0.3s ease-in-out;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.modal-content::-webkit-scrollbar {
+  display: none;
+}
+.modal-overlay.active .modal-content {
+  transform: scale(1);
+}
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 2.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+.modal-content img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+.modal-content h3 {
+  font-family: var(--font-primary);
+  color: var(--heading-color);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.modal-content p {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* PENAMBAHAN STYLE UNTUK TOMBOL VIDEO */
+.modal-video-btn {
+  display: none; /* Sembunyikan secara default */
+  margin-top: 1.5rem;
+  text-align: center;
 }
 
 /* --- Media Query --- */

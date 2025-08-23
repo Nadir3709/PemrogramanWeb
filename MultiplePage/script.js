@@ -77,27 +77,63 @@ document.addEventListener('DOMContentLoaded', function() {
         new Typewriter(heroTypingEl, words, { wait: 3000, speed: 150 });
     }
 
-    // --- Logika transisi halaman sudah dihapus ---
-
-    // --- ANIMASI: Logika Scroll-triggered (Diperbarui) ---
+    // --- ANIMASI: Logika Scroll-triggered ---
     const animatedElements = document.querySelectorAll('.animate-on-scroll');
-
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            // PERUBAHAN DI SINI:
-            // Jika elemen terlihat, tambahkan kelas. Jika tidak, hapus kelas.
             if (entry.isIntersecting) {
                 entry.target.classList.add('is-visible');
             } else {
                 entry.target.classList.remove('is-visible');
             }
         });
-    }, {
-        threshold: 0.1 // Picu animasi saat 10% elemen terlihat
+    }, { threshold: 0.1 });
+    animatedElements.forEach(el => { observer.observe(el); });
+
+
+    // --- LOGIKA MODAL PROYEK (DIPERBARUI) ---
+    const projectCards = document.querySelectorAll('.project-card');
+    const modalOverlay = document.getElementById('project-modal-overlay');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const modalImg = document.getElementById('modal-img');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalVideoBtn = document.getElementById('modal-video-btn'); // Seleksi tombol video
+
+    projectCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const imgSrc = card.dataset.imgSrc;
+            const title = card.dataset.title;
+            const desc = card.dataset.desc;
+            const videoUrl = card.dataset.videoUrl; // Ambil URL video
+
+            modalImg.src = imgSrc;
+            modalTitle.textContent = title;
+            modalDesc.textContent = desc;
+
+            // Logika untuk menampilkan/menyembunyikan tombol video
+            if (videoUrl) {
+                modalVideoBtn.href = videoUrl;
+                modalVideoBtn.style.display = 'inline-block'; // Tampilkan tombol
+            } else {
+                modalVideoBtn.style.display = 'none'; // Sembunyikan tombol
+            }
+
+            modalOverlay.classList.add('active');
+            pageContent.classList.add('content-blurred');
+        });
     });
 
-    animatedElements.forEach(el => {
-        observer.observe(el);
+    const closeModal = () => {
+        modalOverlay.classList.remove('active');
+        pageContent.classList.remove('content-blurred');
+    };
+
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            closeModal();
+        }
     });
 
 });

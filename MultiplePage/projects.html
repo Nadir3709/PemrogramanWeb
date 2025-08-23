@@ -32,28 +32,41 @@
                     <div class="container">
                         <h2 class="section-title animate-on-scroll">My Projects</h2>
                         <div class="project-grid">
-                            <div class="project-card animate-on-scroll" style="animation-delay: 0.2s;">
-                                <img src="https://placehold.co/600x400/1E293B/E2E8F0?text=Project+1" alt="Project 1 Image" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1E293B/E2E8F0?text=Project';">
+                            <!-- Project Card 1 (DENGAN ATRIBUT VIDEO) -->
+                            <div class="project-card animate-on-scroll" style="animation-delay: 0.2s;" 
+                                 data-img-src="https://placehold.co/800x600/1E293B/E2E8F0?text=School+Website" 
+                                 data-title="School Website Redesign" 
+                                 data-desc="This project involved a complete overhaul of the school's official website. I focused on creating a modern, responsive design using HTML, CSS Flexbox, and JavaScript for interactive elements like a news slider and an event calendar. The goal was to improve user experience for students, parents, and teachers."
+                                 data-video-url="https://www.youtube.com/watch?v=your_video_id">
+                                <img src="https://placehold.co/600x400/1E293B/E2E8F0?text=Project+1" alt="Project 1 Image">
                                 <div class="project-info">
                                     <h4>School Website</h4>
-                                    <p>Redesigned the school website using HTML, CSS, and JavaScript to be more modern and responsive.</p>
-                                    <a href="#" class="project-link">View Details &rarr;</a>
+                                    <p>Redesigned the school website using HTML, CSS, and JavaScript...</p>
+                                    <span class="project-link">View Details &rarr;</span>
                                 </div>
                             </div>
-                            <div class="project-card animate-on-scroll" style="animation-delay: 0.4s;">
-                                <img src="https://placehold.co/600x400/1E293B/E2E8F0?text=Project+2" alt="Project 2 Image" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1E293B/E2E8F0?text=Project';">
+                            <!-- Project Card 2 (TANPA ATRIBUT VIDEO) -->
+                            <div class="project-card animate-on-scroll" style="animation-delay: 0.4s;"
+                                 data-img-src="https://placehold.co/800x600/1E293B/E2E8F0?text=Simple+Game"
+                                 data-title="2D Platformer Game"
+                                 data-desc="An exploration into game development using the Luau scripting language on the Roblox platform. This simple 2D platformer features basic mechanics like character movement, jumping, and collecting items. It was a great learning experience in understanding game loops, physics, and event-driven programming.">
+                                <img src="https://placehold.co/600x400/1E293B/E2E8F0?text=Project+2" alt="Project 2 Image">
                                 <div class="project-info">
                                     <h4>Simple Game</h4>
-                                    <p>A 2D platformer game created with the Luau scripting language on the Roblox platform to explore game development.</p>
-                                    <a href="#" class="project-link">View Details &rarr;</a>
+                                    <p>A 2D platformer game created with the Luau scripting language...</p>
+                                    <span class="project-link">View Details &rarr;</span>
                                 </div>
                             </div>
-                            <div class="project-card animate-on-scroll" style="animation-delay: 0.6s;">
-                                <img src="https://placehold.co/600x400/1E293B/E2E8F0?text=Project+3" alt="Project 3 Image" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1E293B/E2E8F0?text=Project';">
+                            <!-- Project Card 3 (TANPA ATRIBUT VIDEO) -->
+                            <div class="project-card animate-on-scroll" style="animation-delay: 0.6s;"
+                                 data-img-src="https://placehold.co/800x600/1E293B/E2E8F0?text=Calculator"
+                                 data-title="JavaScript Calculator App"
+                                 data-desc="A functional calculator application built purely with vanilla JavaScript, HTML, and CSS. This project helped solidify my understanding of fundamental programming logic, event handling, and DOM manipulation. The calculator supports basic arithmetic operations and has a clean, user-friendly interface.">
+                                <img src="https://placehold.co/600x400/1E293B/E2E8F0?text=Project+3" alt="Project 3 Image">
                                 <div class="project-info">
                                     <h4>Calculator App</h4>
-                                    <p>A simple calculator application built with JavaScript to practice basic programming logic and DOM manipulation.</p>
-                                    <a href="#" class="project-link">View Details &rarr;</a>
+                                    <p>A simple calculator application built with JavaScript to practice logic...</p>
+                                    <span class="project-link">View Details &rarr;</span>
                                 </div>
                             </div>
                         </div>
@@ -73,6 +86,18 @@
                 </div>
             </div>
         </footer>
+    </div>
+
+    <!-- STRUKTUR MODAL DIPERBARUI -->
+    <div class="modal-overlay" id="project-modal-overlay">
+        <div class="modal-content" id="project-modal-content">
+            <button class="modal-close" id="modal-close-btn">&times;</button>
+            <img src="" alt="Project Image" id="modal-img">
+            <h3 id="modal-title"></h3>
+            <p id="modal-desc"></p>
+            <!-- TOMBOL VIDEO BARU -->
+            <a href="#" target="_blank" class="cta-button modal-video-btn" id="modal-video-btn">See Tutorial</a>
+        </div>
     </div>
     
     <script src="script.js"></script>
