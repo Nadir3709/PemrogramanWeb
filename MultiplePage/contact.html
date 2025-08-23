@@ -43,7 +43,16 @@
                         </p>
 
                         <div class="contact-content">
-                            <form action="#" class="contact-form fade-in-up" style="animation-delay: 0.4s;">
+                            <!-- 
+                                PENTING: Tombol "Kirim Pesan" ini hanya tampilan (frontend).
+                                Agar bisa benar-benar mengirim email, kamu perlu layanan backend.
+                                Cara termudah adalah menggunakan layanan gratis seperti Formspree.
+                                1. Daftar di formspree.io
+                                2. Buat form baru dan dapatkan URL endpoint-nya.
+                                3. Ganti action="#" di bawah ini dengan URL dari Formspree.
+                                Contoh: action="https://formspree.io/f/your_unique_id"
+                            -->
+                            <form action="#" method="POST" class="contact-form fade-in-up" style="animation-delay: 0.4s;">
                                 <div class="form-group">
                                     <label for="name">Nama</label>
                                     <input type="text" id="name" name="name" required>
