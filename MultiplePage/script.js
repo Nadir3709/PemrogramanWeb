@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let typeSpeed = this.speed;
 
             if (this.isDeleting) {
-                typeSpeed /= 2; // Menghapus lebih cepat
+                typeSpeed /= 2;
                 this.txt = fullTxt.substring(0, this.txt.length - 1);
             } else {
                 this.txt = fullTxt.substring(0, this.txt.length + 1);
@@ -44,29 +44,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
             this.el.innerHTML = `<span class="wrap">${this.txt}</span>`;
 
-            // Kondisi saat selesai mengetik
             if (!this.isDeleting && this.txt === fullTxt) {
-                // Jika looping atau ada banyak kata, mulai hapus setelah jeda
                 if (this.loop || this.words.length > 1) {
                     typeSpeed = this.wait;
                     this.isDeleting = true;
                 } else {
-                    // Hentikan animasi untuk kata tunggal yang tidak looping
                     this.el.querySelector('.wrap').style.animation = 'none';
                     this.el.querySelector('.wrap').style.border = 'none';
                     return;
                 }
-            } 
-            // Kondisi saat sedang menghapus
-            else if (this.isDeleting) {
-                // PERUBAHAN DI SINI: Logika looping khusus untuk logo
-                // Berhenti menghapus jika hanya tersisa 1 karakter
+            } else if (this.isDeleting) {
                 if (this.loop && this.txt.length === 1) {
                     this.isDeleting = false;
-                    typeSpeed = 500; // Jeda sebelum mulai mengetik lagi
-                } 
-                // Logika original untuk teks hero (hapus sampai habis)
-                else if (this.txt === '') {
+                    typeSpeed = 500;
+                } else if (this.txt === '') {
                     this.isDeleting = false;
                     this.wordIndex++;
                     typeSpeed = 500;
@@ -78,22 +69,35 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- Inisialisasi Animasi Ketik ---
-    // 1. Untuk Logo
     if (logoTypingEl) {
-        // PERUBAHAN DI SINI:
-        // Menambahkan 'loop: true' dan 'wait' agar animasi berulang
-        new Typewriter(logoTypingEl, ['Home'], { speed: 350, wait: 3000, loop: true });
+        new Typewriter(logoTypingEl, ['Nadir.'], { speed: 250, wait: 2000, loop: true });
     }
-
-    // 2. Untuk Hero
     if (heroTypingEl) {
-        const words = [
-            "Hi, I'm Muhammad Nadir",
-            "A Web Enthusiast",
-            "A Future Developer"
-        ];
-        // Animasi hero tetap sama, hanya berputar antar kata
+        const words = ["Hi, I'm Muhammad Nadir", "A Web Enthusiast", "A Future Developer"];
         new Typewriter(heroTypingEl, words, { wait: 3000, speed: 150 });
     }
+
+    // --- Logika transisi halaman sudah dihapus ---
+
+    // --- ANIMASI: Logika Scroll-triggered (Diperbarui) ---
+    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            // PERUBAHAN DI SINI:
+            // Jika elemen terlihat, tambahkan kelas. Jika tidak, hapus kelas.
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+            } else {
+                entry.target.classList.remove('is-visible');
+            }
+        });
+    }, {
+        threshold: 0.1 // Picu animasi saat 10% elemen terlihat
+    });
+
+    animatedElements.forEach(el => {
+        observer.observe(el);
+    });
 
 });

@@ -31,11 +31,22 @@ body {
   max-width: 1100px;
   margin: auto;
 }
-
-/* --- FIX: Wrapper Utama untuk Mencegah Bug Scroll --- */
 .page-wrapper {
   position: relative;
-  overflow-x: hidden; /* Ini akan memotong konten yang meluber ke samping (menu) */
+  overflow-x: hidden;
+}
+
+/* --- Style transisi halaman sudah dihapus --- */
+
+/* --- ANIMASI: Scroll-triggered --- */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* --- Efek Blur --- */
@@ -202,7 +213,10 @@ header nav a.active::after {
 .page-section {
   padding: 80px 0;
 }
-.section-title, .section-title-skills, .section-title-about, .section-title-contact {
+.section-title,
+.section-title-skills,
+.section-title-about,
+.section-title-contact {
   font-family: var(--font-primary);
   font-size: 2.5rem;
   color: var(--heading-color);
@@ -373,7 +387,7 @@ header nav a.active::after {
   padding: 4px;
 }
 
-/* --- Footer (BARU) --- */
+/* --- Footer --- */
 footer {
   padding: 2rem 0;
   background-color: var(--background-color);
@@ -436,7 +450,6 @@ footer p {
   .menu-btn.active .bar:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
   }
-
   .hero-container {
     flex-direction: column;
     text-align: center;
@@ -458,12 +471,11 @@ footer p {
     margin-left: auto;
     margin-right: auto;
   }
-
-  /* FIX: Teks rata kiri di mobile */
   .about-content p {
     text-align: left;
   }
-  .section-title-about {
+  .section-title-about,
+  .section-title-contact {
     text-align: left;
   }
   .section-title-skills {
@@ -472,13 +484,8 @@ footer p {
   .contact-content {
     flex-direction: column;
   }
-  .hero-text p {
-    text-align: left;
-  }
+  .hero-text p,
   .page-section p {
-    text-align: left;
-  }
-  .section-title-contact {
     text-align: left;
   }
   .footer-container {
