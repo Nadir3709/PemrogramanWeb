@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const menuBtn = document.getElementById('menu-btn');
     const navMenu = document.getElementById('nav-menu');
     const pageContent = document.querySelector('.page-content');
-    const headerTypingEl = document.getElementById('header-typing-text');
+    const logoTypingEl = document.getElementById('logo-typing-text');
     const heroTypingEl = document.getElementById('hero-typing-text');
 
     // --- Fungsionalitas Menu Mobile & Efek Blur ---
@@ -12,18 +12,20 @@ document.addEventListener('DOMContentLoaded', function() {
         menuBtn.addEventListener('click', () => {
             menuBtn.classList.toggle('active');
             navMenu.classList.toggle('active');
-            pageContent.classList.toggle('content-blurred'); // Tambah/hapus kelas blur
+            pageContent.classList.toggle('content-blurred');
         });
     }
 
     // --- Fungsi Animasi Ketik (Typewriter) ---
     class Typewriter {
-        constructor(el, words, wait = 2000) {
+        constructor(el, words, { wait = 3000, speed = 150, loop = false } = {}) {
             this.el = el;
             this.words = words;
+            this.wait = parseInt(wait, 10);
+            this.speed = parseInt(speed, 10);
+            this.loop = loop;
             this.txt = '';
             this.wordIndex = 0;
-            this.wait = parseInt(wait, 10);
             this.type();
             this.isDeleting = false;
         }
@@ -31,28 +33,44 @@ document.addEventListener('DOMContentLoaded', function() {
         type() {
             const current = this.wordIndex % this.words.length;
             const fullTxt = this.words[current];
-            let typeSpeed = 200;
+            let typeSpeed = this.speed;
 
             if (this.isDeleting) {
-                // Kurangi kecepatan saat menghapus
-                typeSpeed /= 2;
+                typeSpeed /= 2; // Menghapus lebih cepat
                 this.txt = fullTxt.substring(0, this.txt.length - 1);
             } else {
                 this.txt = fullTxt.substring(0, this.txt.length + 1);
             }
 
-            // Tampilkan teks ke elemen
             this.el.innerHTML = `<span class="wrap">${this.txt}</span>`;
 
-            // Logika ganti teks
+            // Kondisi saat selesai mengetik
             if (!this.isDeleting && this.txt === fullTxt) {
-                // Jeda setelah selesai mengetik
-                typeSpeed = this.wait;
-                this.isDeleting = true;
-            } else if (this.isDeleting && this.txt === '') {
-                this.isDeleting = false;
-                this.wordIndex++;
-                typeSpeed = 500; // Jeda sebelum mulai mengetik kata baru
+                // Jika looping atau ada banyak kata, mulai hapus setelah jeda
+                if (this.loop || this.words.length > 1) {
+                    typeSpeed = this.wait;
+                    this.isDeleting = true;
+                } else {
+                    // Hentikan animasi untuk kata tunggal yang tidak looping
+                    this.el.querySelector('.wrap').style.animation = 'none';
+                    this.el.querySelector('.wrap').style.border = 'none';
+                    return;
+                }
+            } 
+            // Kondisi saat sedang menghapus
+            else if (this.isDeleting) {
+                // PERUBAHAN DI SINI: Logika looping khusus untuk logo
+                // Berhenti menghapus jika hanya tersisa 1 karakter
+                if (this.loop && this.txt.length === 1) {
+                    this.isDeleting = false;
+                    typeSpeed = 500; // Jeda sebelum mulai mengetik lagi
+                } 
+                // Logika original untuk teks hero (hapus sampai habis)
+                else if (this.txt === '') {
+                    this.isDeleting = false;
+                    this.wordIndex++;
+                    typeSpeed = 500;
+                }
             }
 
             setTimeout(() => this.type(), typeSpeed);
@@ -60,21 +78,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- Inisialisasi Animasi Ketik ---
-    // 1. Untuk Header (di semua halaman)
-    if (headerTypingEl) {
-        new Typewriter(headerTypingEl, ['Welcome To My Website']);
+    // 1. Untuk Logo
+    if (logoTypingEl) {
+        // PERUBAHAN DI SINI:
+        // Menambahkan 'loop: true' dan 'wait' agar animasi berulang
+        new Typewriter(logoTypingEl, ['Home'], { speed: 350, wait: 3000, loop: true });
     }
 
-    // 2. Untuk Hero (hanya di halaman utama)
+    // 2. Untuk Hero
     if (heroTypingEl) {
         const words = [
-            "Welcome To My Website",
-            "Halo, Saya Muhammad Nadir",
-            "Seorang Web Developer"
+            "Hi, I'm Muhammad Nadir",
+            "A Web Enthusiast",
+            "A Future Developer"
         ];
-        new Typewriter(heroTypingEl, words);
+        // Animasi hero tetap sama, hanya berputar antar kata
+        new Typewriter(heroTypingEl, words, { wait: 3000, speed: 150 });
     }
-    
-    // Kode untuk render ikon Lucide sudah dihapus
 
 });

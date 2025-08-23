@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Me - Portofolio</title>
+    <title>Contact Me - Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
     <div class="page-wrapper">
         <header>
             <div class="container">
-                <a href="index.html" class="logo-text">Nadir.</a>
+                <a href="index.html" class="logo-text" id="logo-typing-text"></a>
                 
                 <button class="menu-btn" id="menu-btn">
                     <span class="bar"></span>
@@ -37,53 +37,56 @@
             <main>
                 <section class="page-section">
                     <div class="container">
-                        <h2 class="section-title fade-in-up">Hubungi Saya</h2>
+                        <h2 class="section-title-contact fade-in-up">Contact Me</h2>
                         <p class="contact-intro fade-in-up" style="animation-delay: 0.2s;">
-                            Punya pertanyaan atau ingin bekerja sama? Jangan ragu untuk mengirim pesan atau terhubung melalui media sosial.
+                            Have a question or want to work together? Feel free to send a message or connect via social media.
                         </p>
 
                         <div class="contact-content">
-                            <!-- 
-                                PENTING: Tombol "Kirim Pesan" ini hanya tampilan (frontend).
-                                Agar bisa benar-benar mengirim email, kamu perlu layanan backend.
-                                Cara termudah adalah menggunakan layanan gratis seperti Formspree.
-                                1. Daftar di formspree.io
-                                2. Buat form baru dan dapatkan URL endpoint-nya.
-                                3. Ganti action="#" di bawah ini dengan URL dari Formspree.
-                                Contoh: action="https://formspree.io/f/your_unique_id"
-                            -->
-                            <form action="#" method="POST" class="contact-form fade-in-up" style="animation-delay: 0.4s;">
+                            <form action="https://formspree.io/f/movlgpzg" method="POST" class="contact-form fade-in-up" style="animation-delay: 0.4s;">
                                 <div class="form-group">
-                                    <label for="name">Nama</label>
+                                    <label for="name">Name</label>
                                     <input type="text" id="name" name="name" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">Email</label>
+                                    <label for="email">Your Email</label>
                                     <input type="email" id="email" name="email" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="message">Pesan</label>
+                                    <label for="message">Message</label>
                                     <textarea id="message" name="message" rows="5" required></textarea>
                                 </div>
-                                <button type="submit" class="cta-button">Kirim Pesan</button>
+                                <button type="submit" class="cta-button">Send Message</button>
                             </form>
                             <div class="contact-info fade-in-up" style="animation-delay: 0.6s;">
-                                <h4>Info Kontak</h4>
-                                <p><strong>Email:</strong><br> <a href="mailto:emailkamu@example.com">emailkamu@example.com</a></p>
-                                <p><strong>Lokasi:</strong><br> Tangerang Selatan, Indonesia</p>
-                                <h4>Media Sosial</h4>
+                                <h4>Contact Info</h4>
+                                <p><strong>Email:</strong><br>muhamadnadir6709@gmail.com</p>
+                                <p><strong>Location:</strong><br> <a href="https://maps.app.goo.gl/FT4Xi9Q6MNL98XTz6" target="_blank">South Tangerang, Indonesia</a></p>
+                                <h4>Social Media</h4>
                                 <div class="social-icons">
-                                    <a href="#" target="_blank" aria-label="Instagram"><img src="https://placehold.co/40x40/121828/E2E8F0?text=IG" alt="Instagram"></a>
-                                    <a href="#" target="_blank" aria-label="TikTok"><img src="https://placehold.co/40x40/121828/E2E8F0?text=TT" alt="TikTok"></a>
-                                    <a href="#" target="_blank" aria-label="WhatsApp"><img src="https://placehold.co/40x40/121828/E2E8F0?text=WA" alt="WhatsApp"></a>
+                                    <a href="#" target="_blank" aria-label="Instagram"><img src="Image/Instagram.png" alt="Instagram"></a>
+                                    <a href="#" target="_blank" aria-label="TikTok"><img src="Image/TikTok.png" alt="TikTok"></a>
+                                    <a href="#" target="_blank" aria-label="WhatsApp"><img src="Image/Whats'App.png" alt="WhatsApp"></a>
                                 </div>
                             </div>
                         </div>
-                         <a href="index.html" class="back-button fade-in-up" style="animation-delay: 0.8s;">&larr; Kembali ke Home</a>
+                         <a href="index.html" class="back-button fade-in-up" style="animation-delay: 0.8s;">&larr; Back to Home</a>
                     </div>
                 </section>
             </main>
         </div>
+
+        <footer>
+            <div class="container footer-container">
+                <p>&copy; 2025 Muhammad Nadir. All Rights Reserved.</p>
+                <div class="footer-socials">
+                    <a href="#" target="_blank" aria-label="Instagram"><img src="Image/Instagram.png" alt="Instagram"></a>
+                    <a href="#" target="_blank" aria-label="TikTok"><img src="Image/TikTok.png" alt="TikTok"></a>
+                    <a href="#" target="_blank" aria-label="WhatsApp"><img src="Image/Whats'App.png" alt="WhatsApp"></a>
+                </div>
+            </div>
+        </footer>
+
     </div>
     
     <script src="script.js"></script>
