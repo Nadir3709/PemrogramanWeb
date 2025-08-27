@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Unfollower Checker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Simple spinner */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-2xl mx-auto bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 space-y-6">
+        <!-- Header -->
+        <div class="text-center">
+            <h1 class="text-3xl font-bold text-white">Cek Siapa yang Gak Follow Back</h1>
+            <p class="text-gray-400 mt-2">Upload file JSON dari data Instagram kamu untuk melihat daftarnya.</p>
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-gray-700/50 p-4 rounded-lg border border-gray-600">
+            <h2 class="text-lg font-semibold mb-2">Cara Mendapatkan File JSON:</h2>
+            <ol class="list-decimal list-inside text-gray-300 space-y-1 text-sm">
+                <li>Buka Instagram (web atau aplikasi) > Masuk ke profil kamu.</li>
+                <li>Pilih menu (garis tiga) > <strong>Your activity</strong> (Aktivitas Anda).</li>
+                <li>Scroll ke bawah, pilih <strong>Download your information</strong> (Unduh informasi Anda).</li>
+                <li>Klik <strong>Request a download</strong> (Minta unduhan).</li>
+                <li>Pilih <strong>Select types of information</strong> (Pilih jenis informasi).</li>
+                <li>Centang HANYA <strong>Followers and following</strong>, lalu klik Next.</li>
+                <li>Pastikan formatnya <strong>JSON</strong> dan kualitas Media <strong>Low</strong>. Klik <strong>Submit request</strong>.</li>
+                <li>Tunggu email dari Instagram, lalu download dan unzip file tersebut. Di dalamnya akan ada folder `followers_and_following` yang berisi file `followers_1.json` dan `following.json`.</li>
+            </ol>
+        </div>
+
+        <!-- File Upload Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="followersFile" class="block mb-2 text-sm font-medium text-gray-300">1. Upload `followers_1.json`</label>
+                <input class="block w-full text-sm text-gray-400 border border-gray-600 rounded-lg cursor-pointer bg-gray-700 focus:outline-none file:bg-gray-600 file:border-0 file:text-white file:px-4 file:py-2" id="followersFile" type="file" accept=".json">
+            </div>
+            <div>
+                <label for="followingFile" class="block mb-2 text-sm font-medium text-gray-300">2. Upload `following.json`</label>
+                <input class="block w-full text-sm text-gray-400 border border-gray-600 rounded-lg cursor-pointer bg-gray-700 focus:outline-none file:bg-gray-600 file:border-0 file:text-white file:px-4 file:py-2" id="followingFile" type="file" accept=".json">
+            </div>
+        </div>
+
+        <!-- Action Button -->
+        <button id="checkButton" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            Cek Sekarang
+        </button>
+
+        <!-- Results -->
+        <div id="results" class="hidden space-y-4">
+            <div id="loading" class="hidden justify-center items-center flex-col">
+                <div class="loader"></div>
+                <p class="mt-4 text-gray-400">Sedang memproses data...</p>
+            </div>
+            <div id="resultsContent">
+                <h2 id="resultsTitle" class="text-2xl font-bold text-center"></h2>
+                <ul id="unfollowersList" class="bg-gray-700/50 max-h-96 overflow-y-auto p-4 rounded-lg space-y-2 border border-gray-600">
+                    <!-- Results will be populated here by JavaScript -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center mt-8">
+        <p class="text-gray-500 text-sm">Script ini berjalan sepenuhnya di browser kamu. Data kamu aman dan tidak diupload ke server manapun.</p>
+    </footer>
+
+    <script>
+        // Get references to the DOM elements
+        const followersFileInput = document.getElementById('followersFile');
+        const followingFileInput = document.getElementById('followingFile');
+        const checkButton = document.getElementById('checkButton');
+        const resultsDiv = document.getElementById('results');
+        const resultsContent = document.getElementById('resultsContent');
+        const resultsTitle = document.getElementById('resultsTitle');
+        const unfollowersList = document.getElementById('unfollowersList');
+        const loadingDiv = document.getElementById('loading');
+
+        // Add event listener to the button
+        checkButton.addEventListener('click', handleCheck);
+
+        /**
+         * Reads a file from a file input and returns its content as a Promise.
+         * @param {File} file The file to read.
+         * @returns {Promise<string>} A promise that resolves with the file content.
+         */
+        function readFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (event) => resolve(event.target.result);
+                reader.onerror = (error) => reject(error);
+                reader.readAsText(file);
+            });
+        }
+
+        /**
+         * Main function to handle the comparison logic.
+         */
+        async function handleCheck() {
+            const followersFile = followersFileInput.files[0];
+            const followingFile = followingFileInput.files[0];
+
+            // Basic validation
+            if (!followersFile || !followingFile) {
+                alert('Harap upload kedua file (`followers_1.json` dan `following.json`) terlebih dahulu.');
+                return;
+            }
+            
+            // Show loading spinner and hide previous results
+            resultsDiv.classList.remove('hidden');
+            loadingDiv.classList.remove('hidden');
+            resultsContent.classList.add('hidden');
+            unfollowersList.innerHTML = ''; // Clear previous results
+
+            try {
+                // Read both files concurrently
+                const [followersContent, followingContent] = await Promise.all([
+                    readFile(followersFile),
+                    readFile(followingFile)
+                ]);
+
+                // Parse the JSON data
+                const followersData = JSON.parse(followersContent);
+                // **FIX:** The 'following' data is nested inside a 'relationships_following' key.
+                const followingData = JSON.parse(followingContent).relationships_following;
+
+                // More robust validation to check if the parsed data is an array
+                if (!Array.isArray(followersData) || !Array.isArray(followingData)) {
+                    throw new Error("Struktur file JSON tidak sesuai. Pastikan file yang diupload adalah file followers dan following yang benar.");
+                }
+
+                // Extract usernames. Instagram's JSON structure is a bit nested.
+                // We use a Set for followers for much faster lookups (O(1) average time complexity).
+                const followersUsernames = new Set(followersData.map(user => user.string_list_data[0].value));
+                const followingUsernames = followingData.map(user => user.string_list_data[0].value);
+
+                // Find users you are following but who are not following you back
+                const notFollowingBack = followingUsernames.filter(username => !followersUsernames.has(username));
+
+                // Display the results
+                displayResults(notFollowingBack);
+
+            } catch (error) {
+                console.error("Error processing files:", error);
+                alert('Terjadi kesalahan saat memproses file. Pastikan file JSON yang diupload benar dan tidak rusak. Detail: ' + error.message);
+                // Hide loading on error
+                loadingDiv.classList.add('hidden');
+                resultsDiv.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Renders the list of users who don't follow back.
+         * @param {string[]} users - An array of usernames.
+         */
+        function displayResults(users) {
+            // Hide loading spinner and show content
+            loadingDiv.classList.add('hidden');
+            resultsContent.classList.remove('hidden');
+
+            if (users.length === 0) {
+                resultsTitle.textContent = 'Mantap! Semua yang kamu follow, follow back kamu. 👍';
+                return;
+            }
+
+            resultsTitle.textContent = `Ditemukan ${users.length} Akun yang Tidak Follow Back:`;
+            
+            // Create a list item for each user
+            users.forEach(username => {
+                const listItem = document.createElement('li');
+                listItem.className = 'flex items-center justify-between p-2 bg-gray-800 rounded-md';
+                
+                const usernameSpan = document.createElement('span');
+                usernameSpan.className = 'font-medium';
+                usernameSpan.textContent = username;
+
+                const profileLink = document.createElement('a');
+                profileLink.href = `https://www.instagram.com/${username}/`;
+                profileLink.target = '_blank';
+                profileLink.rel = 'noopener noreferrer';
+                profileLink.className = 'text-sm bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-3 rounded-full transition-colors';
+                profileLink.textContent = 'Lihat Profil';
+
+                listItem.appendChild(usernameSpan);
+                listItem.appendChild(profileLink);
+                unfollowersList.appendChild(listItem);
+            });
+        }
+    </script>
+</body>
+</html>
